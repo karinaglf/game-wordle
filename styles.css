@@ -5,7 +5,6 @@ body {
 .game-container {
     width: 600px;
     min-height: 90vh;
-    border: black 1px solid;
 }
 .game-board {
     display: grid;
@@ -22,7 +21,18 @@ body {
     width: 65px;
     margin: 5px;
     border: 1px solid black;
+    display: grid;
+    place-items: center;
 }
 button {
     padding: 5px;
+}
+.correct {
+    background-color: green;
+}
+.wrong-place {
+    background-color: yellow;
+}
+.wrong {
+    background-color: grey;
 }

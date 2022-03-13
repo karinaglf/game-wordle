@@ -1,18 +1,14 @@
-//Grab DOM Element
-//Draw
-//Add Game Logic
-
 const board = document.getElementById('game-board');
 const keyboard = document.getElementById('keyboard');
 
 const keys = ['Q', 'W', 'E', 'R', 'T', 'Y', 'U', 'I', 'O', 'P', 'A', 'S', 'D', 'F', 'G', 'H', 'J', 'K', 'L', 'ENTER', 'Z', 'X', 'C', 'V', 'B', 'N', 'M', '«'];
 
-let word = 'party';
+let targetWord = 'party';
 
 class Game {
 	constructor() {
 		this.gameBoard = [
-			['x', 'x', 'x', 'x', 'x'],
+			['k', 'x', 'x', 'x', 'x'],
 			['x', 'x', 'x', 'x', 'x'],
 			['x', 'x', 'x', 'x', 'x'],
 			['x', 'x', 'x', 'x', 'x'],
@@ -21,19 +17,26 @@ class Game {
 		];
 		this.guessRow = 0;
 		this.guessTile = 0;
-		this.gameOver = false;
+		this.guessedWord = '';
+		this.isGameOver = false;
 	}
 
-    start() {
-        this.drawBoard();
-        this.drawKeyboard();
-    }
+	startGame() {
+		this.drawBoard();
+		this.drawKeyboard();
+	}
+
+	startNewGuess() {
+		this.guessTile = 0;
+		this.guessRow++;
+	}
 
 	drawKeyboard() {
 		keys.forEach((key) => {
-			const tile = document.createElement('button');
-			tile.innerText = key;
-			keyboard.appendChild(tile);
+			const btnKey = document.createElement('button');
+			btnKey.innerText = key;
+			btnKey.addEventListener('click', () => this.handleClick(key));
+			keyboard.appendChild(btnKey);
 		});
 	}
 
@@ -41,25 +44,90 @@ class Game {
 		this.gameBoard.forEach((row, index) => {
 			// Create Guess Rows
 			const guessRow = document.createElement('div');
-            guessRow.className =  'guessRow';
+			guessRow.className = 'guessRow';
 			guessRow.setAttribute('id', `row-${index}`);
 
 			// Create Guess Tile on Each Row
 			row.forEach((item, i) => {
 				const tile = document.createElement('div');
-                tile.className =  'guessTile';
+				tile.className = 'guessTile';
 				tile.setAttribute('id', `row-${index}-guess-${i}`);
-                console.log(tile)
-                guessRow.appendChild(tile)
+				guessRow.appendChild(tile);
 			});
 
-            //Draw rows on the board
-			board.appendChild(guessRow);
+			//Draw rows on the board
+			return board.appendChild(guessRow);
 		});
+	}
+
+	handleClick(letter) {
+		if (!this.isGameOver) {
+			if (letter === '«') {
+				this.deleteLetter();
+				return;
+			}
+			if (letter === 'ENTER') {
+				this.submitGuess();
+				return;
+			}
+			this.addLetter(letter);
+		}
+	}
+
+	addLetter(letter) {
+		if (this.guessTile < 5 && this.guessRow <= 6) {
+			this.gameBoard[this.guessRow][this.guessTile] = letter;
+			const tile = document.getElementById(`row-${this.guessRow}-guess-${this.guessTile}`);
+			tile.innerText = letter;
+			this.guessTile++;
+			return;
+		}
+		return;
+	}
+
+	deleteLetter() {
+		if (this.guessTile >= 0 && this.guessTile <= 5) {
+			const tile = document.getElementById(`row-${this.guessRow}-guess-${this.guessTile}`);
+			tile.innerText = '';
+			this.guessTile--;
+			return;
+		}
+		return;	
+	}
+
+	flipCards() {
+		const tiles = this.gameBoard[this.guessRow];
+
+		tiles.forEach((letter, i) => {
+			const card = document.getElementById(`row-${this.guessRow}-guess-${i}`);
+
+			if (targetWord[i] == letter.toLowerCase()) {
+				card.classList.add('correct');
+			} else if (targetWord.includes(letter.toLowerCase())) {
+				card.classList.add('wrong-place');
+			} else {
+				card.classList.add('wrong');
+			}
+		});
+		this.startNewGuess();
+		return;
+	}
+
+	submitGuess() {
+		//this.guessArray.push(this.gameBoard[this.guessRow].join(''))
+		if (this.guessTile < 5) return console.log('Not long enough');
+
+		this.guessedWord = this.gameBoard[this.guessRow].join('');
+
+		if (this.guessedWord.toLowerCase() == targetWord.toLowerCase()) {
+			console.log('yes');
+			this.isGameOver = true;
+			return;
+		} else {
+			this.flipCards();
+		}
 	}
 }
 
 const game = new Game();
-game.drawBoard();
-game.drawKeyboard();
-console.log(game);
+game.startGame();
