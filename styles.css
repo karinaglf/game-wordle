@@ -1,0 +1,28 @@
+body {
+    display: grid;
+    place-items: center;
+}
+.game-container {
+    width: 600px;
+    min-height: 90vh;
+    border: black 1px solid;
+}
+.game-board {
+    display: grid;
+    place-items: center;
+    gap: 1rem;
+}
+.guessRow {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.guessTile {
+    height: 65px;
+    width: 65px;
+    margin: 5px;
+    border: 1px solid black;
+}
+button {
+    padding: 5px;
+}
