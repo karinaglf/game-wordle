@@ -1,10 +1,16 @@
 body {
-    display: grid;
-    place-items: center;
+   margin: 0;
+   padding: 0;
+   box-sizing: border-box;
+   display: flex;
+   flex-direction: column;
+   justify-content: center;
+   align-items: center;
+   font-family: 'Clear Sans', 'Helvetica Neue', Arial, sans-serif;
+   color: black;
 }
 .game-container {
-    width: 600px;
-    min-height: 90vh;
+    width: 500px;
 }
 .game-board {
     display: grid;
@@ -20,19 +26,53 @@ body {
     height: 65px;
     width: 65px;
     margin: 5px;
-    border: 1px solid black;
+    border: 2px solid lightgrey;
     display: grid;
     place-items: center;
+    font-size: 2rem;
+    font-weight: bold;
+}
+#keyboard {
+    display: grid;
+    gap: 3px;
+    grid-template-rows: repeat(3, 1fr);
+    grid-template-columns: repeat(20, 1fr);
+    justify-content: center;
 }
 button {
-    padding: 5px;
+    grid-column: span 2;
+    padding: 15px 10px;
+    border-radius: 6px;
+    border: 2px solid #D3D6DA;
+    background-color: #D3D6DA;
+    font-weight: bold;
+    color: black;
+}
+button:nth-child(11) {
+    grid-column: 2/4;
+}
+button:nth-child(20) {
+    grid-column: 1/4;
+}
+button:nth-child(28) {
+    grid-column: 18/21;
+}
+#message {
+    min-height: 30px;
+    text-align: center;
 }
 .correct {
-    background-color: green;
+    background-color: #6AA964;
+    border: #6AA964 2px solid;
+    color: #fff;
 }
 .wrong-place {
-    background-color: yellow;
+    background-color: #CAB458;
+    border: #CAB458 2px solid;
+    color: #fff;
 }
 .wrong {
-    background-color: grey;
+    background-color: #787C7E;
+    border: #787C7E 2px solid;
+    color: #fff;
 }

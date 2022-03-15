@@ -1,5 +1,6 @@
 const board = document.getElementById('game-board');
 const keyboard = document.getElementById('keyboard');
+const message = document.getElementById('message');
 
 const keys = ['Q', 'W', 'E', 'R', 'T', 'Y', 'U', 'I', 'O', 'P', 'A', 'S', 'D', 'F', 'G', 'H', 'J', 'K', 'L', 'ENTER', 'Z', 'X', 'C', 'V', 'B', 'N', 'M', '«'];
 
@@ -35,6 +36,7 @@ class Game {
 		keys.forEach((key) => {
 			const btnKey = document.createElement('button');
 			btnKey.innerText = key;
+			btnKey.setAttribute('id', `key-${key}`)
 			btnKey.addEventListener('click', () => this.handleClick(key));
 			keyboard.appendChild(btnKey);
 		});
@@ -100,28 +102,44 @@ class Game {
 
 		tiles.forEach((letter, i) => {
 			const card = document.getElementById(`row-${this.guessRow}-guess-${i}`);
+			const btnKey = document.getElementById(`key-${letter}`)
 
 			if (targetWord[i] == letter.toLowerCase()) {
-				card.classList.add('correct');
+				card.classList.add('correct');		
+				btnKey.classList.add('correct');	
 			} else if (targetWord.includes(letter.toLowerCase())) {
 				card.classList.add('wrong-place');
+				btnKey.classList.add('wrong-place');
 			} else {
 				card.classList.add('wrong');
+				btnKey.classList.add('wrong');
 			}
 		});
 		this.startNewGuess();
 		return;
 	}
 
+	finishGame() {
+		const tiles = this.gameBoard[this.guessRow];
+
+		tiles.forEach((letter, i) => {
+			const card = document.getElementById(`row-${this.guessRow}-guess-${i}`);
+
+			if (targetWord[i] == letter.toLowerCase()) {
+				card.classList.add('correct');			
+			}
+		});
+	}
+
 	submitGuess() {
-		//this.guessArray.push(this.gameBoard[this.guessRow].join(''))
 		if (this.guessTile < 5) return console.log('Not long enough');
 
 		this.guessedWord = this.gameBoard[this.guessRow].join('');
 
 		if (this.guessedWord.toLowerCase() == targetWord.toLowerCase()) {
-			console.log('yes');
+			message.innerHTML='You got it!'
 			this.isGameOver = true;
+			this.finishGame();
 			return;
 		} else {
 			this.flipCards();
