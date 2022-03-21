@@ -1,78 +1,144 @@
 body {
-   margin: 0;
-   padding: 0;
-   box-sizing: border-box;
-   display: flex;
-   flex-direction: column;
-   justify-content: center;
-   align-items: center;
-   font-family: 'Clear Sans', 'Helvetica Neue', Arial, sans-serif;
-   color: black;
+	margin: 0;
+	padding: 0;
+	box-sizing: border-box;
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	align-items: center;
+	font-family: 'Clear Sans', 'Helvetica Neue', Arial, sans-serif;
+	color: black;
 }
 .game-container {
-    width: 500px;
+	width: 500px;
 }
 .game-board {
-    display: grid;
-    place-items: center;
-    gap: 1rem;
+	display: grid;
+	place-items: center;
+	gap: 1rem;
 }
 .guessRow {
-    display: flex;
-    justify-content: center;
-    align-items: center;
+	display: flex;
+	justify-content: center;
+	align-items: center;
 }
-.guessTile {
-    height: 65px;
-    width: 65px;
-    margin: 5px;
-    border: 2px solid lightgrey;
-    display: grid;
-    place-items: center;
-    font-size: 2rem;
-    font-weight: bold;
+.guessCard {
+	height: 65px;
+	width: 65px;
+	margin: 5px;
+	border: 2px solid lightgrey;
+	display: grid;
+	place-items: center;
+	font-size: 2rem;
+	font-weight: bold;
+    transition: transform 250ms linear;
 }
+.shake {
+	animation: shake 250ms ease-in-out;
+}
+.dance {
+	animation: dance 600ms ease-in-out;
+}
+
+@keyframes shake {
+	10% {
+		transform: translateX(-5%);
+	}
+
+	30% {
+		transform: translateX(5%);
+	}
+
+	50% {
+		transform: translateX(-7.5%);
+	}
+
+	70% {
+		transform: translateX(7.5%);
+	}
+
+	90% {
+		transform: translateX(-5%);
+	}
+
+	100% {
+		transform: translateX(0);
+	}
+}
+
+@keyframes dance {
+    20% {
+      transform: translateY(-20%);
+    }  
+  
+    40% {
+      transform: translateY(5%);
+    }  
+  
+    60% {
+      transform: translateY(-20%);
+    }  
+  
+    80% {
+      transform: translateY(2.5%);
+    }  
+  
+    90% {
+      transform: translateY(-5%);
+    }  
+  
+    100% {
+      transform: translateY(0);
+    }
+  }
+
 #keyboard {
-    display: grid;
-    gap: 3px;
-    grid-template-rows: repeat(3, 1fr);
-    grid-template-columns: repeat(20, 1fr);
-    justify-content: center;
+	display: grid;
+	gap: 3px;
+	grid-template-rows: repeat(3, 1fr);
+	grid-template-columns: repeat(20, 1fr);
+	justify-content: center;
 }
 button {
-    grid-column: span 2;
-    padding: 15px 10px;
-    border-radius: 6px;
-    border: 2px solid #D3D6DA;
-    background-color: #D3D6DA;
-    font-weight: bold;
-    color: black;
+	grid-column: span 2;
+	padding: 15px 10px;
+	border-radius: 6px;
+	border: 2px solid #d3d6da;
+	background-color: #d3d6da;
+	font-weight: bold;
+	color: black;
 }
 button:nth-child(11) {
-    grid-column: 2/4;
+	grid-column: 2/4;
 }
 button:nth-child(20) {
-    grid-column: 1/4;
+	grid-column: 1/4;
 }
 button:nth-child(28) {
-    grid-column: 18/21;
+	grid-column: 18/21;
 }
 #message {
-    min-height: 30px;
-    text-align: center;
+	min-height: 30px;
+	text-align: center;
 }
 .correct {
-    background-color: #6AA964;
-    border: #6AA964 2px solid;
-    color: #fff;
+	background-color: #6aa964;
+	border: #6aa964 2px solid;
+	color: #fff;
 }
 .wrong-place {
-    background-color: #CAB458;
-    border: #CAB458 2px solid;
-    color: #fff;
+	background-color: #cab458;
+	border: #cab458 2px solid;
+	color: #fff;
 }
 .wrong {
-    background-color: #787C7E;
-    border: #787C7E 2px solid;
-    color: #fff;
+	background-color: #787c7e;
+	border: #787c7e 2px solid;
+	color: #fff;
+}
+.has-letter {
+	border-color: grey;
+}
+.flip {
+	transform: rotateX(90deg);
 }
