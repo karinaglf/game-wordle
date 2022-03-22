@@ -10,6 +10,7 @@ function getRandomWord() {
 
 let targetWord = getRandomWord();
 
+
 class Game {
 	constructor() {
 		this.gameBoard = [
