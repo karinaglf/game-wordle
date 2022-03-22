@@ -13,7 +13,7 @@ body {
 	width: 500px;
 	display: grid;
 	place-items: center;
-	gap: 2rem;
+	gap: 1rem;
 }
 #message {
 	min-height: 35px;

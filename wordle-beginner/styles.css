@@ -7,6 +7,9 @@ body {
 	font-family: 'Clear Sans', 'Helvetica Neue', Arial, sans-serif;
 	color: black;
 }
+h1 {
+	margin: 15px
+}
 .game-container {
     width: 500px;
 	display: grid;
@@ -37,7 +40,7 @@ body {
 	grid-template-rows: repeat(3, 1fr);
 	grid-template-columns: repeat(20, 1fr);
 	justify-content: center;
-    margin-top: 10px;
+    margin-top: 30px;
 }
 button {
 	grid-column: span 2;

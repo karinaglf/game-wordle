@@ -7,7 +7,9 @@ const keyboard = document.getElementById('keyboard');
 const keys = ['Q', 'W', 'E', 'R', 'T', 'Y', 'U', 'I', 'O', 'P', 'A', 'S', 'D', 'F', 'G', 'H', 'J', 'K', 'L', 'ENTER', 'Z', 'X', 'C', 'V', 'B', 'N', 'M', '⌫'];
 
 const wordList = words;
-const targetWord = 'party';
+const targetWord = wordList[Math.floor(Math.random() * wordList.length)];
+
+console.log(targetWord)
 
 const gameBoard = [
 	['', '', '', '', ''],
