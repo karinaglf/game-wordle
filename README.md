@@ -12,8 +12,8 @@ Two versions of the Wordle game have different teaching approaches according to 
 <br>
 
 ## Let's Play
-- [Advanced Version]('./wordle-advanced/index.html')
-- [Beginner Version]('./wordle-beginner/index.html')
+- [Advanced Version](https://karinaglf.github.io/game-wordle/wordle-advanced/index.html)
+- [Beginner Version](https://karinaglf.github.io/game-wordle/wordle-beginner/index.html)
 
 
 
