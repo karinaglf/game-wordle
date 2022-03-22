@@ -2,7 +2,7 @@
 <br>
 
 ## Description
-Two versions of the Wordle game have different teaching approaches according to the audience.
+Two versions of the Wordle game developed with different coding approaches. The goal is to have different code basis for teaching purposes according with the audience level.
 
 1. **Advanced** - addEventListeners for `click` and `keydown`, color changes & animations with setTimeout and CSS Keyframes, showMessage with setTimeout, code based on JS Classes.
 
