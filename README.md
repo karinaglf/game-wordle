@@ -7,8 +7,6 @@ Two versions of the Wordle game developed with different coding approaches. The 
 1. **Advanced** - addEventListeners for `click` and `keydown`, color changes & animations with setTimeout and CSS Keyframes, showMessage with setTimeout, code based on JS Classes.
 
 2. **Beginner** - addEventListener for `click` only, color changes, simpler message input, simpler code syntax.
-
-<br>
 <br>
 
 ## Let's Play
