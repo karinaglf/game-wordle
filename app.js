@@ -1,6 +1,6 @@
 const board = document.getElementById('game-board');
 const keyboard = document.getElementById('keyboard');
-const message = document.getElementById('message');
+const message = document.getElementById('message').firstChild;
 
 const keys = ['Q', 'W', 'E', 'R', 'T', 'Y', 'U', 'I', 'O', 'P', 'A', 'S', 'D', 'F', 'G', 'H', 'J', 'K', 'L', 'ENTER', 'Z', 'X', 'C', 'V', 'B', 'N', 'M', '⌫'];
 
@@ -9,7 +9,6 @@ function getRandomWord() {
 }
 
 let targetWord = getRandomWord();
-console.log(targetWord);
 
 class Game {
 	constructor() {
@@ -21,8 +20,8 @@ class Game {
 			['', '', '', '', ''],
 			['', '', '', '', ''],
 		];
-		this.guessRow = 0;
-		this.guessCard = 0;
+		this.currentRow = 0;
+		this.currentPosition = 0;
 		this.guessedWord = '';
 		this.isGameOver = false;
 	}
@@ -31,28 +30,37 @@ class Game {
 		this.drawBoard();
 		this.drawKeyboard();
 		document.addEventListener('keydown', (e) => this.handleKeyDown(e.key));
+		document.addEventListener('click', (e) => this.handleClick(e.target.value));
 	}
 
 	startNewGuess() {
-		message.innerHTML = '';
+		//message.style.display='none'
 
-		this.guessCard = 0;
+		this.currentPosition = 0;
 
-		if (this.guessRow >= 5) {
-			message.innerHTML = `You missed, the word was ${targetWord.toUpperCase()}`;
+		if (this.currentRow >= 5) {
+			this.showMessage(`You missed, the word was ${targetWord.toUpperCase()}`);
 			this.isGameOver = true;
 		}
 
-		this.guessRow++;
+		this.currentRow++;
+	}
+	showMessage(msgText) {
+		message.innerText = msgText;
+		message.style.display = 'block';
+
+		setTimeout(() => {
+			message.innerText = '';
+			message.style.display = 'none';
+		}, 1000);
 	}
 
 	drawKeyboard() {
 		keys.forEach((key) => {
 			const btnKey = document.createElement('button');
 			btnKey.innerText = key;
+			btnKey.value = key;
 			btnKey.setAttribute('id', `key-${key}`);
-			btnKey.setAttribute('value', key);
-			btnKey.addEventListener('click', () => this.handleClick(key));
 			keyboard.appendChild(btnKey);
 		});
 	}
@@ -77,15 +85,15 @@ class Game {
 		});
 	}
 
-	handleClick(letter) {
-		if (!this.isGameOver) {
-			if (letter === '⌫') {
+	handleClick(btnValue) {
+		if (!this.isGameOver && btnValue !== undefined) {
+			if (btnValue === '⌫') {
 				return this.deleteLetter();
 			}
-			if (letter === 'ENTER') {
+			if (btnValue === 'ENTER') {
 				return this.submitGuess();
 			}
-			return this.addLetter(letter);
+			return this.addLetter(btnValue);
 		}
 		return;
 	}
@@ -108,92 +116,108 @@ class Game {
 	addLetter(letter) {
 		message.innerHTML = '';
 
-		if (this.guessCard < 5 && this.guessRow <= 6) {
-			this.gameBoard[this.guessRow][this.guessCard] = letter;
-			const cardElement = document.getElementById(`row-${this.guessRow}-guess-${this.guessCard}`);
+		if (this.currentPosition < 5 && this.currentRow <= 6) {
+			//Update game controllers
+			this.gameBoard[this.currentRow][this.currentPosition] = letter;
+
+			//Update DOM
+			const cardElement = document.getElementById(`row-${this.currentRow}-guess-${this.currentPosition}`);
 			cardElement.innerText = letter;
 			cardElement.classList.add('has-letter');
-			this.guessCard++;
+			this.currentPosition++;
 			return;
 		}
 		return;
 	}
 
 	deleteLetter() {
-		message.innerHTML = '';
-
-		if (this.guessCard > 0 && this.guessCard <= 5) {
-			const cardElement = document.getElementById(`row-${this.guessRow}-guess-${this.guessCard - 1}`);
+		if (this.currentPosition > 0 && this.currentPosition <= 5) {
+			const cardElement = document.getElementById(`row-${this.currentRow}-guess-${this.currentPosition - 1}`);
 			cardElement.innerText = '';
 			cardElement.classList.remove('has-letter');
-			this.guessCard--;
+			this.currentPosition--;
 			return;
 		}
 		return;
 	}
 
 	flipCards() {
-		const rowSquares = this.gameBoard[this.guessRow];
+		const guessCards = this.gameBoard[this.currentRow];
 
-		rowSquares.forEach((letter, i) => {
-			const card = document.getElementById(`row-${this.guessRow}-guess-${i}`);
+		guessCards.forEach((letter, i) => {
+			const card = document.getElementById(`row-${this.currentRow}-guess-${i}`);
 
 			setTimeout(() => {
 				card.classList.add('flip');
-			}, (i * 500) / 2);
+				this.colorCards(letter, i);
+			}, 400 * i);
 
 			card.addEventListener('transitionend', () => {
 				card.classList.remove('flip');
 			});
 
-		});
-	}
+			setTimeout(() => {
+				this.colorKeyboard(letter, i);
+			}, 400 * 5);
 
-	colorGame() {
-		const rowSquares = this.gameBoard[this.guessRow];
-
-		rowSquares.forEach((letter, i) => {
-			const card = document.getElementById(`row-${this.guessRow}-guess-${i}`);
-			const btnKey = document.getElementById(`key-${letter}`);
-
-			if (targetWord[i] == letter.toLowerCase()) {
-				card.classList.add('correct');
-				card.classList.add('correct');
-			} else if (targetWord.includes(letter.toLowerCase())) {
-				card.classList.add('wrong-place');
-				btnKey.classList.add('wrong-place');
-			} else {
-				card.classList.add('wrong');
-				btnKey.classList.add('wrong');
+			if (this.isGameOver) {
+				setTimeout(() => {
+					this.showMessage('You got it!');
+					this.danceCards();
+				}, 400 * 5);
 			}
 		});
+
+		this.startNewGuess();
+	}
+
+	colorCards(letter, i) {
+		let card = document.getElementById(`row-${this.currentRow - 1}-guess-${i}`);
+
+		if (targetWord[i] == letter.toLowerCase()) {
+			card.classList.add('correct');
+		} else if (targetWord.includes(letter.toLowerCase())) {
+			card.classList.add('wrong-place');
+		} else {
+			card.classList.add('wrong');
+		}
+	}
+
+	colorKeyboard(letter, i) {
+		const btnKey = document.getElementById(`key-${letter}`);
+
+		if (targetWord[i] == letter.toLowerCase()) {
+			btnKey.classList.add('correct');
+		} else if (targetWord.includes(letter.toLowerCase())) {
+			btnKey.classList.add('wrong-place');
+		} else {
+			btnKey.classList.add('wrong');
+		}
 	}
 
 	submitGuess() {
-		if (this.guessCard < 5) return (message.innerHTML = 'Not long enough');
+		if (this.currentPosition < 5) return this.showMessage('Not long enough');
 
-		this.guessedWord = this.gameBoard[this.guessRow].join('').toLowerCase();
+		this.guessedWord = this.gameBoard[this.currentRow].join('').toLowerCase();
+
+		console.log(this.guessedWord);
 
 		if (this.guessedWord == targetWord) {
-			message.innerHTML = 'You got it!';
-			this.colorGame();
-			this.danceCards();
 			this.isGameOver = true;
+			this.flipCards();
 		} else if (!words.includes(this.guessedWord)) {
-			message.innerHTML = 'Not in word list!';
+			this.showMessage('Not in word list!');
 			this.shakeCards();
 		} else {
 			this.flipCards();
-			this.colorGame();
-			this.startNewGuess();
 		}
 	}
 
 	shakeCards() {
-		const rowCards = this.gameBoard[this.guessRow];
+		const guessCards = this.gameBoard[this.currentRow];
 
-		rowCards.forEach((card, i) => {
-			const cardElement = document.getElementById(`row-${this.guessRow}-guess-${i}`);
+		guessCards.forEach((card, i) => {
+			const cardElement = document.getElementById(`row-${this.currentRow}-guess-${i}`);
 			cardElement.classList.add('shake');
 			cardElement.addEventListener('animationend', () => {
 				cardElement.classList.remove('shake');
@@ -202,16 +226,17 @@ class Game {
 	}
 
 	danceCards() {
-		const rowCards = this.gameBoard[this.guessRow];
+		const guessCards = this.gameBoard[this.currentRow];
 
-		rowCards.forEach((card, i) => {
-			const cardElement = document.getElementById(`row-${this.guessRow}-guess-${i}`);
+		guessCards.forEach((letter, i) => {
+			const card = document.getElementById(`row-${this.currentRow - 1}-guess-${i}`);
 
 			setTimeout(() => {
-				cardElement.classList.add('dance');
-			}, (i * 500) / 2);
-			cardElement.addEventListener('animationend', () => {
-				cardElement.classList.remove('dance');
+				card.classList.add('dance');
+			}, 400 * i);
+
+			card.addEventListener('animationend', () => {
+				card.classList.remove('dance');
 			});
 		});
 	}

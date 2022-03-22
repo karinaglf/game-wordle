@@ -11,6 +11,20 @@ body {
 }
 .game-container {
 	width: 500px;
+	display: grid;
+	place-items: center;
+	gap: 2rem;
+}
+#message {
+	min-height: 35px;
+}
+#message span {
+	display: none;
+	text-align: center;
+	background-color: black;
+	color: #fff;
+	font-size: 1.2rem;
+	padding: 4px 8px;
 }
 .game-board {
 	display: grid;
@@ -31,66 +45,53 @@ body {
 	place-items: center;
 	font-size: 2rem;
 	font-weight: bold;
-    transition: transform 250ms linear;
+	transition: transform 250ms linear;
 }
 .shake {
 	animation: shake 250ms ease-in-out;
 }
 .dance {
-	animation: dance 600ms ease-in-out;
+	animation: dance 300ms ease-in-out;
+}
+.flip {
+	transform: rotateX(90deg);
 }
 
 @keyframes shake {
-	10% {
-		transform: translateX(-5%);
+	0% {
+		transform: translateX(-6%);
 	}
 
 	30% {
-		transform: translateX(5%);
+		transform: translateX(6%);
 	}
 
-	50% {
-		transform: translateX(-7.5%);
-	}
-
-	70% {
-		transform: translateX(7.5%);
-	}
-
-	90% {
-		transform: translateX(-5%);
+	60% {
+		transform: translateX(-6%);
 	}
 
 	100% {
-		transform: translateX(0);
+		transform: translateX(0%);
 	}
 }
 
 @keyframes dance {
-    20% {
-      transform: translateY(-20%);
-    }  
-  
-    40% {
-      transform: translateY(5%);
-    }  
-  
-    60% {
-      transform: translateY(-20%);
-    }  
-  
-    80% {
-      transform: translateY(2.5%);
-    }  
-  
-    90% {
-      transform: translateY(-5%);
-    }  
-  
-    100% {
-      transform: translateY(0);
-    }
-  }
+	0% {
+		transform: translateY(-6%);
+	}
+
+	30% {
+		transform: translateY(6%);
+	}
+
+	60% {
+		transform: translateY(-6%);
+	}
+
+	100% {
+		transform: translateY(0%);
+	}
+}
 
 #keyboard {
 	display: grid;
@@ -117,9 +118,8 @@ button:nth-child(20) {
 button:nth-child(28) {
 	grid-column: 18/21;
 }
-#message {
-	min-height: 30px;
-	text-align: center;
+.has-letter {
+	border-color: grey;
 }
 .correct {
 	background-color: #6aa964;
@@ -135,10 +135,4 @@ button:nth-child(28) {
 	background-color: #787c7e;
 	border: #787c7e 2px solid;
 	color: #fff;
-}
-.has-letter {
-	border-color: grey;
-}
-.flip {
-	transform: rotateX(90deg);
 }
