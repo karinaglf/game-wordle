@@ -9,8 +9,6 @@ const keys = ['Q', 'W', 'E', 'R', 'T', 'Y', 'U', 'I', 'O', 'P', 'A', 'S', 'D', '
 const wordList = words;
 const targetWord = wordList[Math.floor(Math.random() * wordList.length)];
 
-console.log(targetWord)
-
 const gameBoard = [
 	['', '', '', '', ''],
 	['', '', '', '', ''],
@@ -72,9 +70,9 @@ function startNewGuess() {
 }
 
 function handleClick(letter) {
-	if (letter == '⌫') {
+	if (letter === '⌫') {
 		deleteLetter();
-	} else if (letter == 'ENTER') {
+	} else if (letter === 'ENTER') {
 		submitGuess();
 	} else {
 		addLetter(letter);
@@ -95,18 +93,16 @@ function addLetter(letter) {
 }
 
 function deleteLetter() {
+	
 	message.innerText = '';
-
 	if (currentPosition > 0 && currentPosition <= 5) {
-		//Update DOM
 		const cardElement = document.getElementById(`row-${currentRow}-card-${currentPosition - 1}`);
 		cardElement.innerText = '';
 		cardElement.classList.remove('has-letter');
-
-		// Update game controllers
-		gameBoard[currentRow][currentPosition] = '';
-		return currentPosition--;
+		currentPosition--;
+		return;
 	}
+	return;
 }
 
 function submitGuess() {
@@ -115,7 +111,7 @@ function submitGuess() {
 	guessedWord = gameBoard[currentRow].join('').toLowerCase();
 	console.log(guessedWord);
 
-	if (guessedWord == targetWord) {
+	if (guessedWord === targetWord) {
 		isGameOver = true;
 		checkLetters();
 		message.innerText = 'You got it!';
@@ -133,7 +129,7 @@ function checkLetters() {
 		const card = document.getElementById(`row-${currentRow}-card-${i}`);
 		const btnKey = document.getElementById(`key-${letter}`);
 
-		if (targetWord[i] == letter.toLowerCase()) {
+		if (targetWord[i] === letter.toLowerCase()) {
 			card.classList.add('correct');
 			btnKey.classList.add('correct');
 		} else if (targetWord.includes(letter.toLowerCase())) {
